@@ -1,0 +1,5 @@
+{
+  "name": "ResuMate AI",
+  "description": "An AI-powered resume rewriter that optimizes your CV for ATS systems using Google Gemini. Upload your current resume and a job description to get a tailored, high-scoring version.",
+  "requestFramePermissions": []
+}
