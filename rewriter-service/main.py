@@ -409,8 +409,21 @@ Rewrite the resume now:""",
             keywords_missing=keywords_missing
         )
 
+    except RuntimeError as e:
+        if "OPENAI_API_KEY" in str(e):
+            raise HTTPException(
+                status_code=503,
+                detail="OPENAI_API_KEY environment variable is not set. Please configure it in the rewriter service."
+            )
+        raise HTTPException(status_code=500, detail=f"Configuration error: {str(e)}")
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"OpenAI error: {str(e)}")
+        error_msg = str(e)
+        if "API key" in error_msg or "authentication" in error_msg.lower():
+            raise HTTPException(
+                status_code=401,
+                detail=f"OpenAI API authentication failed: {error_msg}. Please check your OPENAI_API_KEY."
+            )
+        raise HTTPException(status_code=500, detail=f"OpenAI error: {error_msg}")
 
 
 @app.get("/health")
