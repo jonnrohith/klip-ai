@@ -22,12 +22,14 @@ try:
     OPENAI_AVAILABLE = True
 except ImportError:
     OPENAI_AVAILABLE = False
+    logger.warning("OpenAI not available. Install with: pip install openai")
 
 try:
     from weasyprint import HTML
     WEASYPRINT_AVAILABLE = True
-except (ImportError, OSError):
+except (ImportError, OSError) as e:
     WEASYPRINT_AVAILABLE = False
+    logger.warning(f"WeasyPrint not available: {e}. PDF generation will be disabled.")
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
