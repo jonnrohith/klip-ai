@@ -1,0 +1,21 @@
+# Ignore Python backend files - backend is deployed on Render
+main.py
+models.py
+requirements.txt
+*.py
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.venv/
+venv/
+ENV/
+env/
+*.egg-info/
+.pytest_cache/
+rewriter-service/
+pdf-service/
+utils/
+templates/
+
