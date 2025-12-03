@@ -16,6 +16,9 @@ from collections import Counter
 from models import UploadResponse
 from utils.parser import parse_resume, parse_job_description
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 # Try to import OpenAI and WeasyPrint for integrated mode
 try:
     from openai import OpenAI
@@ -30,9 +33,6 @@ try:
 except (ImportError, OSError) as e:
     WEASYPRINT_AVAILABLE = False
     logger.warning(f"WeasyPrint not available: {e}. PDF generation will be disabled.")
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 try:
     import redis

@@ -1,6 +1,7 @@
 import React from 'react';
 import { AnalysisResult } from '../types';
 import ScoreGauge from './ScoreGauge';
+import html2pdf from 'html2pdf.js';
 
 interface ResumePreviewProps {
   data: AnalysisResult;
@@ -10,7 +11,7 @@ interface ResumePreviewProps {
 const ResumePreview: React.FC<ResumePreviewProps> = ({ data }) => {
   const { rewrittenResume, keywordsFound, keywordsMissing, improvementsMade, originalScore, optimizedScore, pdfB64 } = data;
 
-  const handleDownload = () => {
+  const handleDownload = async () => {
     if (pdfB64 && pdfB64.length > 0) {
       // Use the PDF from backend
       const byteCharacters = atob(pdfB64);
@@ -28,8 +29,53 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data }) => {
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
+    } else if (data.htmlResume) {
+      // Fallback: Generate PDF from HTML using html2pdf.js
+      try {
+        // Find the resume container element
+        const resumeContainer = document.querySelector('.resume-container') || 
+                                document.getElementById('resume-preview')?.querySelector('.resume-container');
+        
+        let elementToConvert;
+        
+        if (resumeContainer) {
+          elementToConvert = resumeContainer;
+        } else {
+          // Create a temporary element with the HTML resume
+          const tempDiv = document.createElement('div');
+          tempDiv.innerHTML = data.htmlResume;
+          tempDiv.style.width = '8.5in';
+          tempDiv.style.padding = '0';
+          tempDiv.style.margin = '0';
+          tempDiv.style.backgroundColor = 'white';
+          document.body.appendChild(tempDiv);
+          elementToConvert = tempDiv;
+        }
+        
+        const opt = {
+          margin: [0.25, 0.15],
+          filename: `${rewrittenResume.fullName.replace(/\s+/g, '_')}_Resume.pdf`,
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: { 
+            scale: 2, 
+            useCORS: true,
+            logging: false,
+            backgroundColor: '#ffffff'
+          },
+          jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+        
+        await html2pdf().set(opt).from(elementToConvert).save();
+        
+        // Clean up temporary element if we created one
+        if (!resumeContainer && elementToConvert.parentNode) {
+          document.body.removeChild(elementToConvert);
+        }
+      } catch (error) {
+        console.error('PDF generation error:', error);
+        alert('Failed to generate PDF. Please try again.');
+      }
     } else {
-      // Fallback: show error or try to generate from HTML
       alert('PDF not available. Please try again or contact support.');
     }
   };
