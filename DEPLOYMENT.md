@@ -4,6 +4,14 @@
 
 The backend is a FastAPI application that can be deployed to any platform that supports Python.
 
+**📋 For a complete comparison of deployment platforms, see [DEPLOYMENT_OPTIONS.md](./DEPLOYMENT_OPTIONS.md)**
+
+### Quick Recommendations:
+- **Best Overall:** [Render](https://render.com) - Free tier, WeasyPrint works, easy setup
+- **Easiest:** [Railway](https://railway.app) - Auto-detects everything, $5 free credit/month
+- **Global Scale:** [Fly.io](https://fly.io) - Edge deployment, great performance
+- **Full-Stack:** [Vercel](https://vercel.com) - Frontend + Backend (PDF via client-side)
+
 ### Option 1: Deploy to Vercel (Recommended for Full-Stack)
 
 Vercel supports FastAPI through serverless functions. See [VERCEL_DEPLOY.md](./VERCEL_DEPLOY.md) for detailed instructions.
