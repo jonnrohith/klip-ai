@@ -1,30 +1,28 @@
 # Deployment Guide
 
-## Current Issue
+## Backend Deployment
 
-The frontend is deployed on Vercel, but the backend services are not deployed. The frontend is trying to call `http://127.0.0.1:8000` which doesn't exist in production.
+The backend is a FastAPI application that can be deployed to any platform that supports Python.
 
-## Solution: Deploy Backend to Production
+### General Deployment Steps
 
-You have two options:
+1. **Install Dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-### Option 1: Deploy to Railway (Recommended - Easiest)
+2. **Set Environment Variables:**
+   - `OPENAI_API_KEY`: Your OpenAI API key (required)
 
-1. Go to https://railway.app
-2. Create a new project
-3. Connect your GitHub repository
-4. Add a new service from your repo
-5. Set the root directory to the project root (not rewriter-service or pdf-service)
-6. Set environment variables:
-   - `OPENAI_API_KEY`: Your OpenAI API key
-   - `PORT`: Railway will set this automatically
-7. Railway will auto-detect Python and install dependencies
-8. Set the start command: `uvicorn main:app --host 0.0.0.0 --port $PORT`
-9. Get the deployed URL (e.g., `https://your-app.railway.app`)
-10. Update your frontend `.env` or `vite.config.ts` to use this URL
+3. **Start the Server:**
+   ```bash
+   uvicorn main:app --host 0.0.0.0 --port $PORT
+   ```
+   (Replace `$PORT` with your platform's port variable or a specific port like `8000`)
 
-### Option 2: Deploy to Render
+### Platform-Specific Deployment
 
+#### Deploy to Render
 1. Go to https://render.com
 2. Create a new Web Service
 3. Connect your GitHub repository
@@ -33,24 +31,24 @@ You have two options:
    - Start Command: `uvicorn main:app --host 0.0.0.0 --port $PORT`
 5. Add environment variable: `OPENAI_API_KEY`
 6. Deploy and get the URL
-7. Update frontend to use this URL
 
-### Option 3: Use Vercel Serverless Functions (Advanced)
+#### Deploy to Other Platforms
+- **Heroku**: Use `Procfile` (create one if needed)
+- **DigitalOcean App Platform**: Configure build and start commands
+- **AWS/GCP/Azure**: Use container deployment or serverless functions
 
-Vercel supports Python serverless functions, but WeasyPrint (PDF generation) requires system libraries that may not be available. This option is more complex.
-
-## Update Frontend Configuration
+## Frontend Configuration
 
 After deploying the backend, update the frontend to point to your deployed backend:
 
 1. Create a `.env.production` file:
 ```
-VITE_BACKEND_URL=https://your-backend-url.railway.app
+VITE_BACKEND_URL=https://your-backend-url.com
 ```
 
 Or update `services/gemini.ts`:
 ```typescript
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "https://your-backend-url.railway.app";
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "https://your-backend-url.com";
 ```
 
 ## Integrated Mode
@@ -115,5 +113,5 @@ npm run dev
 
 - The `node-domexception` warning is harmless and comes from a transitive dependency
 - WeasyPrint requires system libraries that may need to be installed on the deployment platform
-- For Railway/Render, the integrated mode (single service) is recommended for simplicity
+- The integrated mode (single service) is recommended for simplicity
 
