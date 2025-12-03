@@ -170,16 +170,19 @@ CRITICAL: The HTML structure MUST match EXACTLY. Use the exact class names and s
   margin: 5px 0;
 }
 section {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+  page-break-inside: avoid;
 }
 h2 {
   font-size: 11pt;
   font-weight: bold;
   text-transform: uppercase;
-  margin: 15px 0 8px 0;
+  margin: 20px 0 10px 0;
+  padding-top: 5px;
   border-bottom: 1px solid #000;
-  padding-bottom: 2px;
+  padding-bottom: 3px;
   letter-spacing: 0.5px;
+  page-break-after: avoid;
 }
 .job, .project {
   margin-bottom: 12px;

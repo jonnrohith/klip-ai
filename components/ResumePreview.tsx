@@ -48,9 +48,31 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data }) => {
           tempDiv.style.padding = '0';
           tempDiv.style.margin = '0';
           tempDiv.style.backgroundColor = 'white';
+          // Ensure proper spacing for PDF
+          tempDiv.style.lineHeight = '1.4';
           document.body.appendChild(tempDiv);
           elementToConvert = tempDiv;
         }
+        
+        // Add additional CSS to prevent overlapping
+        const style = document.createElement('style');
+        style.textContent = `
+          .resume section {
+            margin-bottom: 20px !important;
+            page-break-inside: avoid !important;
+          }
+          .resume h2 {
+            margin-top: 20px !important;
+            margin-bottom: 10px !important;
+            padding-top: 5px !important;
+            page-break-after: avoid !important;
+          }
+          .resume .job, .resume .project {
+            margin-bottom: 15px !important;
+            page-break-inside: avoid !important;
+          }
+        `;
+        document.head.appendChild(style);
         
         const opt = {
           margin: [0.25, 0.15],
@@ -60,14 +82,28 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data }) => {
             scale: 2, 
             useCORS: true,
             logging: false,
-            backgroundColor: '#ffffff'
+            backgroundColor: '#ffffff',
+            letterRendering: true,
+            allowTaint: false
           },
-          jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+          jsPDF: { 
+            unit: 'in', 
+            format: 'letter', 
+            orientation: 'portrait',
+            compress: true
+          },
+          pagebreak: { 
+            mode: ['avoid-all', 'css', 'legacy'],
+            before: '.page-break-before',
+            after: '.page-break-after',
+            avoid: ['h2', 'section']
+          }
         };
         
         await html2pdf().set(opt).from(elementToConvert).save();
         
-        // Clean up temporary element if we created one
+        // Clean up
+        document.head.removeChild(style);
         if (!resumeContainer && elementToConvert.parentNode) {
           document.body.removeChild(elementToConvert);
         }
