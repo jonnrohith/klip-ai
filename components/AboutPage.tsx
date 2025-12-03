@@ -21,7 +21,7 @@ const AboutPage: React.FC = () => {
         </p>
 
         <p>
-          Currently powered by <span className="font-bold border-b border-black pb-0.5">OpenAI</span>, 
+          Currently powered by <span className="font-bold border-b border-black pb-0.5">CrewAI agent framework</span>, 
           our engine deconstructs your career history and reconstructs it through the lens of algorithmic perfection.
           We strip away the redundant, the vague, and the unseen—leaving only the essential.
         </p>
