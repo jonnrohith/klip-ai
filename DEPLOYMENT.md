@@ -4,6 +4,19 @@
 
 The backend is a FastAPI application that can be deployed to any platform that supports Python.
 
+### Option 1: Deploy to Vercel (Recommended for Full-Stack)
+
+Vercel supports FastAPI through serverless functions. See [VERCEL_DEPLOY.md](./VERCEL_DEPLOY.md) for detailed instructions.
+
+**Quick Deploy:**
+```bash
+npm install -g vercel
+vercel login
+vercel
+```
+
+**Note:** PDF generation (WeasyPrint) may not work in Vercel's serverless environment, but the app handles this gracefully.
+
 ### General Deployment Steps
 
 1. **Install Dependencies:**
