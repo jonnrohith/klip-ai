@@ -40,6 +40,8 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data }) => {
         
         if (resumeContainer) {
           elementToConvert = resumeContainer;
+          // Ensure white background
+          (elementToConvert as HTMLElement).style.backgroundColor = 'white';
         } else {
           // Create a temporary element with the HTML resume
           const tempDiv = document.createElement('div');
@@ -48,18 +50,27 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data }) => {
           tempDiv.style.padding = '0';
           tempDiv.style.margin = '0';
           tempDiv.style.backgroundColor = 'white';
+          tempDiv.style.background = 'white';
           // Ensure proper spacing for PDF
           tempDiv.style.lineHeight = '1.4';
           document.body.appendChild(tempDiv);
           elementToConvert = tempDiv;
         }
         
-        // Add additional CSS to prevent overlapping
+        // Add additional CSS to prevent overlapping and ensure white background
         const style = document.createElement('style');
         style.textContent = `
+          body {
+            background-color: white !important;
+          }
+          .resume {
+            background-color: white !important;
+            background: white !important;
+          }
           .resume section {
             margin-bottom: 20px !important;
             page-break-inside: avoid !important;
+            background-color: white !important;
           }
           .resume h2 {
             margin-top: 20px !important;
@@ -193,6 +204,8 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data }) => {
             style={{
               width: '100%',
               height: '100%',
+              backgroundColor: 'white',
+              background: 'white',
             }}
           />
         ) : (
