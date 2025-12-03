@@ -1,19 +1,14 @@
 {
-  "version": 2,
-  "builds": [
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "framework": "vite",
+  "installCommand": "npm install",
+  "devCommand": "npm run dev",
+  "rewrites": [
     {
-      "src": "main.py",
-      "use": "@vercel/python"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "main.py"
-    }
-  ],
-  "env": {
-    "PYTHONUNBUFFERED": "1"
-  }
+  ]
 }
 
